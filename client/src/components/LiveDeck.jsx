@@ -52,7 +52,7 @@ export default function LiveDeck() {
   useEffect(() => {
     const t = setInterval(() => {
       if (!paused.current) next();
-    }, 3000);
+    }, 2000);
     return () => clearInterval(t);
   }, []);
 
