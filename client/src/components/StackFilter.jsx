@@ -22,7 +22,7 @@ export function monthChoices() {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
     opts.push({
       value: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
-      label: d.toLocaleString('en-IN', { month: 'short', year: 'numeric' })
+      label: d.toLocaleString('en-IN', { month: 'short', year: '2-digit' })
     });
   }
   return opts;

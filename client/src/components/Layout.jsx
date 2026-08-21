@@ -121,11 +121,7 @@ export default function Layout() {
       </aside>
       <div className="main">
         <div className="topbar">
-          <button className="menu-btn" type="button" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
-            <span />
-            <span />
-            <span />
-          </button>
+          <button className="menu-btn" type="button" aria-label="Open menu" onClick={() => setMenuOpen(true)} />
           <div className="topbar-who">
             <div className="kicker">Kutumb courtyard</div>
             <h2 className="hello">

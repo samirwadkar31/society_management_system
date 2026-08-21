@@ -1785,6 +1785,7 @@ textarea {
 .stack-month-btn {
   width: auto;
   max-width: 210px;
+  min-width: 0;
   height: 40px;
   margin: 0;
   padding: 0 28px 0 12px;
@@ -1795,11 +1796,15 @@ textarea {
   background-color: var(--paper);
   color: var(--ink);
   appearance: none;
+  -webkit-appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, #2c5f73 50%),
     linear-gradient(135deg, #2c5f73 50%, transparent 50%);
   background-position: calc(100% - 14px) calc(50% + 3px), calc(100% - 9px) calc(50% + 3px);
   background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .list-head-tools .btn {
@@ -2823,23 +2828,29 @@ a.doc-link:hover,
   }
   .menu-btn {
     display: inline-flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    gap: 5px;
     width: 44px;
     height: 44px;
-    background: var(--paper);
+    background: #fffcf8;
     border: 1px solid var(--line);
     border-radius: 14px;
-    padding: 12px 11px;
+    padding: 0;
     cursor: pointer;
     flex-shrink: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: none;
   }
-  .menu-btn span {
+  .menu-btn::before {
+    content: '';
     display: block;
+    width: 18px;
     height: 2px;
-    background: var(--ink);
+    background: #0e1a22;
     border-radius: 99px;
+    box-shadow: 0 -6px 0 #0e1a22, 0 6px 0 #0e1a22;
   }
   .menu-close {
     display: inline-flex;
@@ -3033,18 +3044,25 @@ a.doc-link:hover,
     justify-content: flex-start;
   }
   .stack-filter {
-    flex: 1;
+    flex: 1 1 100%;
     min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    width: 100%;
+  }
+  .stack-filter:not(:has(.stack-month)) {
+    grid-template-columns: minmax(0, 1fr);
   }
   .stack-filter select,
-  .stack-month {
-    flex: 1;
-    min-width: 0;
-  }
-  .stack-filter select,
+  .stack-month,
   .stack-month-btn {
     width: 100%;
     max-width: none;
+    min-width: 0;
+  }
+  .stack-month-btn {
+    font-size: 0.78rem;
+    padding: 0 24px 0 10px;
   }
   .list-head-tools .btn,
   .list-head .btn {
