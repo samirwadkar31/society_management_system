@@ -932,10 +932,13 @@ p {
     line-height: 1.6;
   }
   .hero-note {
-    margin-top: 20px;
+    margin-top: 12px;
     margin-bottom: 0;
     font-size: 0.88rem;
-    line-height: 1.65;
+    line-height: 1.5;
+  }
+  .hero-doors {
+    display: none;
   }
   .wallet {
     width: 100%;

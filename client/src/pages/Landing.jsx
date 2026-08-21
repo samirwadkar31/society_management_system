@@ -71,9 +71,11 @@ export default function Landing() {
                 </Link>
               </div>
               <p className="hero-note">
-                Three doors — <b>Resident</b> in ivory, <b>Admin</b> in brass,{' '}
-                <b>Staff sign in</b> (top right) for trades and the gate.
-                <br />
+                <span className="hero-doors">
+                  Three doors — <b>Resident</b> in ivory, <b>Admin</b> in brass,{' '}
+                  <b>Staff sign in</b> (top right) for trades and the gate.
+                  <br />
+                </span>
                 New to the building?{' '}
                 <Link to="/register">Create a resident account</Link>
                 — the committee approves it.
