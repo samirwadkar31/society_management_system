@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kutumb — how the project works</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #0e1a22;
+        --navy-2: #1a3545;
+        --ivory: #f3eee4;
+        --sand: #f4f1ea;
+        --paper: #fffcf8;
+        --brass: #c4a574;
+        --teal: #2c5f73;
+        --ink: #12181c;
+        --line: #e6dfd4;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--sand);
+        color: var(--ink);
+        font-family: Outfit, system-ui, sans-serif;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.4rem;
+      }
+      p,
+      li {
+        line-height: 1.55;
+        color: #3d474d;
+      }
+      a {
+        color: var(--teal);
+      }
+      .hero {
+        background: linear-gradient(180deg, #0e1a22, #1a3545);
+        color: var(--ivory);
+        padding: 36px 6vw 28px;
+      }
+      .hero .kicker {
+        font-size: 0.72rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--brass);
+        font-weight: 600;
+      }
+      .hero h1 {
+        font-size: clamp(2.2rem, 5vw, 3.4rem);
+        color: #fff;
+      }
+      .hero h1 em {
+        font-style: italic;
+        color: var(--brass);
+      }
+      .hero p {
+        max-width: 62ch;
+        color: rgba(243, 238, 228, 0.82);
+      }
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+        flex-wrap: wrap;
+      }
+      .tabs button {
+        border: 0;
+        cursor: pointer;
+        border-radius: 999px;
+        padding: 12px 22px;
+        font-family: Outfit, sans-serif;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+      .tabs .on-front {
+        background: var(--ivory);
+        color: var(--navy);
+      }
+      .tabs .on-back {
+        background: var(--brass);
+        color: var(--navy);
+      }
+      .tabs .off {
+        background: transparent;
+        color: var(--ivory);
+        box-shadow: inset 0 0 0 1px rgba(243, 238, 228, 0.28);
+      }
+      main {
+        padding: 28px 6vw 80px;
+        max-width: 1080px;
+        margin: 0 auto;
+      }
+      .panel {
+        display: none;
+      }
+      .panel.show {
+        display: block;
+      }
+      .card {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 22px 22px 18px;
+        margin: 16px 0;
+        box-shadow: 0 18px 50px rgba(14, 26, 34, 0.06);
+      }
+      .card h2 {
+        font-size: 1.85rem;
+      }
+      .card h3 {
+        font-size: 1.35rem;
+        margin-top: 4px;
+        margin-bottom: 6px;
+      }
+      img.wide {
+        width: 100%;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        margin: 12px 0 6px;
+        display: block;
+      }
+      figcaption {
+        font-size: 0.82rem;
+        color: var(--teal);
+        font-weight: 600;
+      }
+      .steps {
+        display: grid;
+        gap: 10px;
+        margin: 12px 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: s;
+      }
+      .steps li {
+        background: var(--sand);
+        border-radius: 14px;
+        padding: 12px 14px 12px 48px;
+        position: relative;
+      }
+      .steps li::before {
+        counter-increment: s;
+        content: counter(s);
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--navy);
+        color: var(--ivory);
+        font-size: 0.78rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        border: 1px solid #b7aea0;
+        margin: 8px 0 36px;
+        background: #fff;
+      }
+      th {
+        text-align: left;
+        color: var(--teal);
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 10px 8px;
+        border: 1px solid #b7aea0;
+        background: var(--sand);
+      }
+      td {
+        padding: 10px 8px;
+        border: 1px solid #b7aea0;
+        vertical-align: top;
+      }
+      code {
+        font-size: 0.86em;
+        background: var(--sand);
+        padding: 1px 6px;
+        border-radius: 6px;
+      }
+      .q {
+        border-top: 1px solid var(--line);
+        padding-top: 12px;
+        margin-top: 12px;
+      }
+      .q strong {
+        color: var(--navy);
+      }
+      .chip {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        background: #e8f0f3;
+        color: var(--teal);
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin-right: 6px;
+      }
+      .verb {
+        font-family: Outfit, sans-serif;
+        font-weight: 600;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        color: var(--teal);
+        white-space: nowrap;
+      }
+      .who {
+        color: var(--teal);
+        font-size: 0.82rem;
+        white-space: nowrap;
+      }
+      .stack {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin: 12px 0 14px;
+        padding: 12px 14px;
+        background: var(--sand);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+      .stack-k {
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: var(--teal);
+        margin-right: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="kicker">Interview revision · Kutumb</div>
+      <h1>The society, <em>explained on one page.</em></h1>
+      <p>
+        Open this file in Chrome. Use the two buttons. Speak in this order in an interview: problem → four
+        roles → MERN split → one workflow in detail (complaints or the gate). Live site:
+        <a href="https://kutumb-nu.vercel.app" style="color: #c4a574">kutumb-nu.vercel.app</a>
+        · API
+        <a href="https://kutumb-api.onrender.com" style="color: #c4a574">kutumb-api.onrender.com</a>
+      </p>
+      <div class="tabs">
+        <button id="btn-fe" class="on-front" type="button">Frontend</button>
+        <button id="btn-be" class="off" type="button">Backend</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="fe" class="panel show">
+        <article class="card">
+          <h2>What the frontend is</h2>
+          <div class="stack">
+            <span class="stack-k">Tech stack</span>
+            <span class="chip">React 18</span>
+            <span class="chip">Vite</span>
+            <span class="chip">React Router</span>
+            <span class="chip">JavaScript (no TypeScript)</span>
+            <span class="chip">fetch + useState</span>
+            <span class="chip">no Redux</span>
+            <span class="chip">plain CSS</span>
+            <span class="chip">qrcode.react</span>
+          </div>
+          <p>
+            The UI is a <b>Vite + React</b> app in <code>client/</code>. It is only screens and routing. It never
+            talks to MongoDB. Every list, login, and payment goes through <code>client/src/api.js</code>, which
+            calls the Express API with <code>fetch</code>.
+          </p>
+          <p>
+            Hosted on <b>Vercel</b> as static files (<code>npm run build</code> → <code>dist</code>). Env
+            <code>VITE_API_URL=https://kutumb-api.onrender.com</code> is baked in at build time.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>File</th>
+                <th>What it is for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>src/api.js</code></td><td><code>fetch(VITE_API_URL + '/api' + path)</code> + Bearer token. <code>uploadFile</code> posts FormData.</td></tr>
+              <tr><td><code>src/context/AuthContext.jsx</code></td><td>Saves <code>kutumb_token</code>. On load calls <code>GET /users/me</code>.</td></tr>
+              <tr><td><code>src/App.jsx</code></td><td>All routes. <code>Guard</code> checks login and role.</td></tr>
+              <tr><td><code>src/components/Layout.jsx</code></td><td>Sidebar from <code>NAV</code> by role. Resident SOS button.</td></tr>
+              <tr><td><code>src/components/StackFilter.jsx</code></td><td>Live vs Past month filter on list pages.</td></tr>
+              <tr><td><code>src/index.css</code></td><td>Courtyard look (navy, ivory, brass, teal). Mobile at 980px.</td></tr>
+            </tbody>
+          </table>
+          <figure>
+            <img class="wide" src="img/kutumb-architecture.png" alt="Browser to Vercel to Render to Atlas" />
+            <figcaption>Browser → React on Vercel → Express on Render → MongoDB Atlas</figcaption>
+          </figure>
+        </article>
+
+        <article class="card">
+          <h2>Four doors</h2>
+          <p>
+            Landing has three visible CTAs: Resident (ivory), Admin (brass), Staff sign in (teal, top right).
+            Staff and security share the staff door. After login, <code>Layout.jsx</code> draws a
+            <b>different sidebar</b> from the <code>NAV</code> map. A resident never sees Residents or Gate.
+          </p>
+          <figure>
+            <img class="wide" src="img/kutumb-roles.png" alt="Four role doors" />
+            <figcaption>Same app, four menus. Guard in App.jsx blocks the wrong role.</figcaption>
+          </figure>
+          <table>
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Home</th>
+                <th>Can do</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Admin</td>
+                <td>Courtyard stats</td>
+                <td>Approve flats, generate bills, assign jobs, pin notices, approve bookings</td>
+              </tr>
+              <tr>
+                <td>Resident</td>
+                <td>My open work</td>
+                <td>Flat details, complaints, pay bills, book clubhouse, pre-approve guests, SOS</td>
+              </tr>
+              <tr>
+                <td>Staff</td>
+                <td>Assigned jobs</td>
+                <td>Update complaint status, add proof, see SOS</td>
+              </tr>
+              <tr>
+                <td>Security</td>
+                <td>Expected guests</td>
+                <td>Find pass, mark in/out, handle emergencies</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card">
+          <h2>Auth, in order</h2>
+          <p>Read only <b>Part A</b> until it is clear. Then B. Then C. Do not mix them in an interview opening.</p>
+
+          <h3>Part A — How login works</h3>
+          <p>Goal of login: prove “this email owns this password.” Nothing else.</p>
+          <ol class="steps">
+            <li>
+              <b>Browser.</b> User submits the form on <code>Login.jsx</code>.
+              React sends <code>POST /api/auth/login</code> with JSON
+              <code>{ "email": "...", "password": "..." }</code>.
+              There is no token on this request. Login is public.
+            </li>
+            <li>
+              <b>API.</b> Express looks up that email in MongoDB. If missing → 400, same message as a wrong password.
+            </li>
+            <li>
+              <b>Password check.</b> Mongo stores a <b>bcrypt hash</b>, not the real password.
+              <code>bcrypt.compare(typed, hash)</code> is true or false. False → 400.
+            </li>
+            <li>
+              <b>Extra rules (still login, not JWT yet).</b>
+              Resident + <code>pending</code> → 403 (admin has not approved).
+              <code>inactive</code> → 403.
+            </li>
+            <li>
+              <b>Success body.</b> API returns two things: a <code>user</code> object (no password) and a
+              <code>token</code> string. How that string is built is Part B.
+            </li>
+            <li>
+              <b>Browser after success.</b>
+              <code>login(token, user)</code> saves the token as <code>kutumb_token</code> in <code>localStorage</code>,
+              puts <code>user</code> in React state, then <code>navigate('/app')</code>.
+            </li>
+          </ol>
+          <p>
+            One sentence to say: <i>“Login is bcrypt against Mongo. If it passes, the API hands back a JWT and the React app stores it.”</i>
+          </p>
+
+          <h3>Part B — How the JWT works</h3>
+          <p>The token is <b>not</b> the password. It is a signed ID card the API created <i>after</i> login succeeded.</p>
+          <ol class="steps">
+            <li>
+              <b>Create.</b>
+              <code>jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' })</code>.
+              Payload is only id and role. Secret is on the server. Expiry 7 days.
+            </li>
+            <li>
+              <b>Shape.</b> Three Base64 parts: header.payload.signature.
+              Anyone can decode the payload (it is not encryption). The signature is the lock.
+            </li>
+            <li>
+              <b>Trust.</b> Later, <code>jwt.verify(token, JWT_SECRET)</code>.
+              If someone changes <code>role</code> to <code>admin</code> in the payload, the signature no longer matches → 401.
+            </li>
+            <li>
+              <b>Use.</b> <code>api.js</code> reads <code>kutumb_token</code> and sends
+              <code>Authorization: Bearer &lt;token&gt;</code> on every call except login/register/forgot.
+            </li>
+            <li>
+              <b>Middleware</b> <code>auth.js</code>: verify JWT → load that User from Mongo → <code>req.user</code>.
+              Routes then filter data (resident sees own bills) or <code>allowRoles('admin')</code>.
+            </li>
+          </ol>
+          <p>
+            One sentence to say: <i>“JWT is a signed note of user id and role. The password is not inside it. The server verifies the signature with JWT_SECRET.”</i>
+          </p>
+          <figure>
+            <img class="wide" src="img/kutumb-jwt.png" alt="JWT after login" />
+            <figcaption>Part A ends when bcrypt succeeds. Part B is the signed token after that.</figcaption>
+          </figure>
+
+          <h3>Part C — Other scenarios (only after A and B)</h3>
+          <p><b>Refresh.</b> React state is gone. Token is still in localStorage. App calls <code>GET /api/users/me</code> with Bearer. Verify JWT, return user. Bad/expired token → delete <code>kutumb_token</code>. Password is not sent again.</p>
+          <p><b>Logout.</b> Delete <code>kutumb_token</code>, <code>user = null</code>. Next request has no Bearer. We do not blacklist tokens (demo).</p>
+          <p><b>Register.</b> Creates resident <code>pending</code>. No token. They must complete Part A after admin approves.</p>
+          <p><b>Guard (UI).</b> No user → <code>/login</code>. Wrong role on a URL → <code>/app</code>. This only hides pages.</p>
+          <p><b>allowRoles (API).</b> Real lock. A resident JWT cannot hit <code>POST /api/bills/generate</code>.</p>
+          <p><b>localStorage vs cookies.</b> We used localStorage because it is simple. XSS could steal the token; production often uses httpOnly cookies.</p>
+        </article>
+
+        <article class="card">
+          <h2>Pages and routes</h2>
+          <p>Logged-in screens sit under <code>/app/*</code> inside <code>Layout</code> (sidebar + topbar). Resident SOS is on the topbar.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Path</th>
+                <th>File</th>
+                <th>Who</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>/</code></td><td>Landing.jsx</td><td>Public — three role doors</td></tr>
+              <tr><td><code>/login</code></td><td>Login.jsx</td><td>Public</td></tr>
+              <tr><td><code>/register</code></td><td>Register.jsx</td><td>Public — residents only</td></tr>
+              <tr><td><code>/forgot</code></td><td>Forgot.jsx</td><td>Public — shows <code>resetLink</code> on screen</td></tr>
+              <tr><td><code>/reset-password/:token</code></td><td>Reset.jsx</td><td>Public — new password</td></tr>
+              <tr><td><code>/app</code></td><td>Dashboard.jsx</td><td>All — different stats per role</td></tr>
+              <tr><td><code>/app/flat</code></td><td>MyFlat.jsx</td><td>Resident — family, vehicles, pets, contacts</td></tr>
+              <tr><td><code>/app/residents</code></td><td>Residents.jsx</td><td>Admin — list + search</td></tr>
+              <tr><td><code>/app/residents/:id</code></td><td>ResidentForm.jsx</td><td>Admin — approve / edit (save bar at bottom)</td></tr>
+              <tr><td><code>/app/members</code></td><td>AddMember.jsx</td><td>Admin — create staff or security (already approved)</td></tr>
+              <tr><td><code>/app/complaints</code></td><td>Complaints.jsx</td><td>Admin / resident / staff (jobs)</td></tr>
+              <tr><td><code>/app/complaints/:id</code></td><td>ComplaintDetail.jsx</td><td>Status, comments, proof, rate</td></tr>
+              <tr><td><code>/app/bills</code></td><td>Bills.jsx</td><td>Admin generate, resident demo-pay</td></tr>
+              <tr><td><code>/app/bills/:id</code></td><td>Receipt.jsx</td><td>Printable slip</td></tr>
+              <tr><td><code>/app/bookings</code></td><td>Bookings.jsx</td><td>Calendar; clash check on the API</td></tr>
+              <tr><td><code>/app/notices</code></td><td>Notices.jsx</td><td>Admin pin; others read</td></tr>
+              <tr><td><code>/app/visitors</code></td><td>Visitors.jsx</td><td>Resident / admin pre-approve</td></tr>
+              <tr><td><code>/app/visitors/:id/pass</code></td><td>VisitorPass.jsx</td><td>6-digit code + QR (<code>qrcode.react</code>)</td></tr>
+              <tr><td><code>/app/gate</code></td><td>Gate.jsx</td><td>Security + admin — lookup pass, in/out</td></tr>
+              <tr><td><code>/app/emergencies</code></td><td>Emergencies.jsx</td><td>SOS list; staff/security/admin handle</td></tr>
+              <tr><td><code>/app/profile</code></td><td>Profile.jsx</td><td>All — name, phone, change password</td></tr>
+            </tbody>
+          </table>
+          <p>Sidebar is not the same for everyone. It comes from <code>NAV</code> in <code>Layout.jsx</code>: resident has My flat and SOS; staff has Jobs; security has Gate; admin has Residents, Bills, Add member.</p>
+        </article>
+
+        <article class="card">
+          <h2>Live vs Past lists</h2>
+          <p>
+            Default view is only unfinished work so a month of data does not bury the courtyard.
+            <code>StackFilter.jsx</code> splits on the client. Past needs a month pick.
+          </p>
+          <ul>
+            <li><b>Complaints</b> — live if not <code>resolved</code>.</li>
+            <li><b>Bills</b> — live if not <code>paid</code>. Admin sees owner name + flat.</li>
+            <li><b>Visitors</b> — live if <code>pre-approved</code> or <code>entered</code> (still inside, even if 5 days old).</li>
+            <li><b>Bookings</b> — live if pending, or approved with date ≥ today.</li>
+            <li><b>Notices</b> — pinned or last 30 days.</li>
+            <li><b>Emergencies</b> — live if <code>active</code>.</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h2>Workflows the student should narrate</h2>
+          <h3>1. New resident</h3>
+          <ol class="steps">
+            <li>Register → status <code>pending</code>. Login is blocked until admin approves.</li>
+            <li>Admin opens Residents → the person → Status Approved → <b>Approve resident</b>.</li>
+            <li>Resident can log in and fill My flat.</li>
+          </ol>
+          <h3>2. Complaint</h3>
+          <figure>
+            <img class="wide" src="img/kutumb-complaint-flow.png" alt="Complaint workflow" />
+            <figcaption>Category maps to a trade. First matching staff is auto-assigned.</figcaption>
+          </figure>
+          <ol class="steps">
+            <li>Resident raises plumbing leak (photo is optional). File goes to <code>POST /api/upload</code>; this demo stores a base64 data URL on the complaint.</li>
+            <li>UI shows Open / Assigned. Staff sees it on Jobs.</li>
+            <li>Staff: in-progress → resolved + proof. Resident can rate.</li>
+            <li>Resident/admin can escalate (status escalated, priority high).</li>
+          </ol>
+          <h3>3. Bills</h3>
+          <ol class="steps">
+            <li>Admin: Create for all flats (maintenance / vargani / sinking fund / other).</li>
+            <li>Each approved resident gets a bill. Overdue maintenance adds ₹100 late fee when the list is loaded.</li>
+            <li>Resident taps Pay. API returns <code>{ demo: true }</code>. UI then calls verify, which sets the bill <code>paid</code>. There is no live payment gateway on this demo.</li>
+          </ol>
+          <h3>4. Book facility</h3>
+          <ol class="steps">
+            <li>Facilities (gym, hall, pool, lawn, guest room) come from <code>seed.js</code>. There is no “create facility” API.</li>
+            <li>Pick a future day on the calendar. Request start–end.</li>
+            <li>API rejects overlapping pending/approved slots (same facility + date + overlapping <code>HH:mm</code>).</li>
+            <li>Resident booking is pending; admin approves or rejects. Admin booking is auto-approved.</li>
+          </ol>
+          <h3>5. Gate</h3>
+          <figure>
+            <img class="wide" src="img/kutumb-gate-flow.png" alt="Visitor gate workflow" />
+            <figcaption>Pass is a 6-digit code. Times are In / Out, not “expected at”.</figcaption>
+          </figure>
+          <h3>6. SOS</h3>
+          <p>Resident red SOS in the topbar (and sidebar) → POST emergency → admin, security and staff see Active until Mark handled.</p>
+          <h3>7. My flat, profile, pass, forgot password</h3>
+          <ul>
+            <li><b>My flat</b> — resident edits family, vehicles, pets, emergency contacts (<code>PUT /users/me</code>).</li>
+            <li><b>Profile</b> — name, phone, change password.</li>
+            <li><b>Visitor pass</b> — 6-digit code drawn as a QR with <code>qrcode.react</code>.</li>
+            <li><b>Forgot password</b> — API does not email in this demo; it returns a <code>resetLink</code> on screen. Open that URL, set a new password.</li>
+            <li><b>Add member</b> — admin creates staff/security already <code>approved</code>.</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h2>Hosting, seed, demo logins</h2>
+          <p>Same Atlas database for local and production. Seed ran once from the laptop (<code>npm run seed</code>) because free Render has no Shell. On each API start, extra staff emails are filled in if missing.</p>
+          <table>
+            <thead>
+              <tr><th>Role</th><th>Email</th><th>Password</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Admin</td><td><code>admin@kutumb.local</code></td><td>Admin@123</td></tr>
+              <tr><td>Resident (approved)</td><td><code>resident@kutumb.local</code></td><td>Resident@123</td></tr>
+              <tr><td>Resident (2nd flat)</td><td><code>priya@kutumb.local</code></td><td>Resident@123</td></tr>
+              <tr><td>Resident (pending — cannot log in)</td><td><code>pending@kutumb.local</code></td><td>Resident@123</td></tr>
+              <tr><td>Staff plumber</td><td><code>staff@kutumb.local</code></td><td>Staff@123</td></tr>
+              <tr><td>Staff electrician</td><td><code>electric@kutumb.local</code></td><td>Staff@123</td></tr>
+              <tr><td>Staff housekeeping</td><td><code>housekeeping@kutumb.local</code></td><td>Staff@123</td></tr>
+              <tr><td>Staff lift</td><td><code>lift@kutumb.local</code></td><td>Staff@123</td></tr>
+              <tr><td>Staff general</td><td><code>general@kutumb.local</code></td><td>Staff@123</td></tr>
+              <tr><td>Security</td><td><code>security@kutumb.local</code></td><td>Security@123</td></tr>
+            </tbody>
+          </table>
+          <p>UI: Vercel, root <code>client</code>, env <code>VITE_API_URL</code>. API: Render, root <code>server</code>, env <code>MONGO_URI</code>, <code>JWT_SECRET</code>, <code>CLIENT_URL</code>. Free Render sleeps ~50s on first hit.</p>
+          <p>This demo is one society, four roles, JWT in localStorage, demo pay, data-URL uploads, reset link on screen. No live chat, no Socket.io, no multi-building SaaS.</p>
+        </article>
+
+        <article class="card">
+          <h2>Likely interview questions (frontend)</h2>
+          <div class="q">
+            <p><strong>Why React + Vite, not Next.js?</strong> Course stack was SPA + separate API. Vite builds static files for Vercel. The Express server on Render is the only backend.</p>
+            <p><strong>Why no Redux / Context everywhere?</strong> Auth is one context. Each page loads its list with <code>useState</code> + <code>useEffect</code>. A global store is extra for this size.</p>
+            <p><strong>Why <code>fetch</code>, not Axios?</strong> One helper in <code>api.js</code> adds the JWT and parses JSON. Native <code>fetch</code> is enough.</p>
+            <p><strong>How does the UI talk to the API?</strong> <code>api('/complaints')</code> becomes <code>fetch(VITE_API_URL + '/api/complaints')</code> with <code>Authorization: Bearer &lt;kutumb_token&gt;</code>. React never queries Mongo.</p>
+            <p><strong>Where is the token stored? Why not cookies?</strong> <code>localStorage</code> key <code>kutumb_token</code>. Simple for a college demo. Honest follow-up: XSS can steal it; production often uses httpOnly cookies.</p>
+            <p><strong>What happens on refresh?</strong> React state is gone. Token is still in localStorage. <code>AuthContext</code> calls <code>GET /api/users/me</code>. Bad or expired JWT → delete token, send to login.</p>
+            <p><strong>Guard vs hiding the sidebar — is that security?</strong> No. <code>Guard</code> only stops the wrong role seeing a page. Real lock is <code>allowRoles</code> on the API. Always say both.</p>
+            <p><strong>How does each role get a different menu?</strong> <code>NAV</code> object in <code>Layout.jsx</code>. After login, <code>NAV[user.role]</code> draws the links. Resident never sees Residents or Gate in the sidebar.</p>
+            <p><strong>How does login routing work?</strong> Public routes: landing, login, register, forgot, reset. Logged-in shell is <code>/app/*</code> wrapped in <code>Layout</code>. Wrong role on a URL → redirect to <code>/app</code>.</p>
+            <p><strong>How do Live vs Past lists work?</strong> Client filter in <code>StackFilter.jsx</code>. Default = unfinished (unpaid bills, open complaints, guests still inside). Past needs a month so old data does not bury the courtyard.</p>
+            <p><strong>How does Pay work on the screen?</strong> Resident taps Pay → <code>POST /bills/:id/order</code> returns <code>{ demo: true }</code> → UI calls verify → bill shows paid. There is no checkout popup on this demo.</p>
+            <p><strong>How is the visitor QR made?</strong> Pass page loads the guest from <code>GET /visitors</code>, draws the 6-digit <code>passCode</code> with <code>qrcode.react</code>.</p>
+            <p><strong>How does SOS work in the UI?</strong> Resident button on the topbar posts <code>POST /emergencies</code>, then opens the emergencies list. Admin, security, and staff see Active until Mark handled.</p>
+            <p><strong>How does forgot password work without email?</strong> Forgot page calls the API, which returns <code>resetLink</code>. The link is printed on screen. Open it, set a new password on <code>Reset.jsx</code>.</p>
+            <p><strong>Why no TypeScript?</strong> Course and teammates used JS. Same language on client and server. Types would be nicer in a job project; this one shipped in JS.</p>
+            <p><strong>If they open <code>package.json</code> and see extra libraries?</strong> <code>chart.js</code> is unused. A few server packages are leftover fallbacks this demo never turned on. Uploads are data URLs, pay is demo, reset link is on screen. Do not list those as the stack.</p>
+          </div>
+        </article>
+      </section>
+
+      <section id="be" class="panel">
+        <article class="card">
+          <h2>What the backend is</h2>
+          <div class="stack">
+            <span class="stack-k">Tech stack</span>
+            <span class="chip">Node.js</span>
+            <span class="chip">Express</span>
+            <span class="chip">MongoDB Atlas</span>
+            <span class="chip">Mongoose</span>
+            <span class="chip">JWT</span>
+            <span class="chip">bcryptjs</span>
+            <span class="chip">CORS</span>
+            <span class="chip">Multer</span>
+            <span class="chip">dotenv</span>
+          </div>
+          <p>
+            <code>server/index.js</code> starts Express, enables <b>CORS</b> for the Vercel URL + localhost,
+            parses JSON (15mb for photos), mounts <code>/api/*</code> routers, then
+            <code>mongoose.connect(MONGO_URI)</code> and listens on <code>process.env.PORT</code> (Render sets PORT).
+          </p>
+          <p>Hosted on <b>Render</b> (free instance sleeps). Database is <b>MongoDB Atlas</b> (same cluster locally and in prod).</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Folder / file</th>
+                <th>What it is for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>index.js</code></td><td>CORS, JSON 15mb, mount <code>/api/*</code>, connect Atlas, listen, <code>ensureDemoStaff()</code></td></tr>
+              <tr><td><code>middleware/auth.js</code></td><td>JWT verify + <code>allowRoles</code></td></tr>
+              <tr><td><code>models/</code></td><td>8 collections (User, Complaint, Bill, Booking, Facility, Visitor, Notice, Emergency)</td></tr>
+              <tr><td><code>routes/</code></td><td>One file per resource</td></tr>
+              <tr><td><code>utils/staffJobs.js</code></td><td>Category → trade map, staff job filter</td></tr>
+              <tr><td><code>utils/upload.js</code></td><td>Multer memory, 12MB; this demo returns a data URL</td></tr>
+              <tr><td><code>utils/demoStaff.js</code></td><td>On boot, create extra staff emails if missing</td></tr>
+              <tr><td><code>seed.js</code></td><td>Wipes collections, creates demo users, facilities, sample data</td></tr>
+            </tbody>
+          </table>
+          <figure>
+            <img class="wide" src="img/kutumb-architecture.png" alt="Hosting split" />
+            <figcaption>API never serves React. React never queries Mongo.</figcaption>
+          </figure>
+        </article>
+
+        <article class="card">
+          <h2>Auth middleware</h2>
+          <p><code>server/middleware/auth.js</code></p>
+          <ol class="steps">
+            <li>Read <code>Authorization: Bearer …</code>.</li>
+            <li><code>jwt.verify(token, JWT_SECRET)</code> → <code>{ id, role }</code>.</li>
+            <li>Load user from Mongo (no password field). Put on <code>req.user</code>.</li>
+            <li><code>allowRoles('admin')</code> returns 403 if role does not match.</li>
+          </ol>
+          <p>Passwords: <b>bcryptjs</b> hash on register/seed. Never store plain text. JWT expires in 7 days.</p>
+          <figure>
+            <img class="wide" src="img/kutumb-jwt.png" alt="JWT verify on API" />
+            <figcaption>Login issues the token. Every protected route verifies it.</figcaption>
+          </figure>
+        </article>
+
+        <article class="card">
+          <h2>Collections (Mongoose models)</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Important fields</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>User</td>
+                <td>role, status pending/approved/inactive, staffType, block/flatNo, family, vehicles, pets, emergencyContacts, resetToken + resetExpires</td>
+              </tr>
+              <tr>
+                <td>Complaint</td>
+                <td>category, priority, status, assignedTo, media, comments, proofMedia, rating</td>
+              </tr>
+              <tr>
+                <td>Bill</td>
+                <td>type (maintenance / vargani / sinking-fund / other), month/year, amount, lateFee, dueDate, status, paidAt</td>
+              </tr>
+              <tr>
+                <td>Facility</td>
+                <td>name, hours. Created by <code>seed.js</code> (gym, hall, pool, lawn, guest room). No create-facility API.</td>
+              </tr>
+              <tr>
+                <td>Booking</td>
+                <td>facility + user, date YYYY-MM-DD, start/end HH:mm, status pending/approved/cancelled/rejected</td>
+              </tr>
+              <tr>
+                <td>Visitor</td>
+                <td>purpose guest/delivery, passCode, status pre-approved/entered/exited/expired, entryAt, exitAt</td>
+              </tr>
+              <tr>
+                <td>Notice</td>
+                <td>type general/water/power/meeting/event, pinned, attachments</td>
+              </tr>
+              <tr>
+                <td>Emergency</td>
+                <td>type fire/medical/security/electrical/water, flat/block, status active/handled</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card">
+          <h2>Every API endpoint</h2>
+          <p>
+            Base URL locally is <code>http://localhost:5000</code>. On Render it is
+            <code>https://kutumb-api.onrender.com</code>. The React app always prefixes <code>/api</code>.
+            “Logged in” means the request sends <code>Authorization: Bearer &lt;JWT&gt;</code>.
+            <b>Not every route needs that.</b> Only five calls are public (No). Everything else is Yes.
+          </p>
+
+          <h3>Health</h3>
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Who</th><th>JWT</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/</code></td>
+                <td class="who">Public</td>
+                <td>No</td>
+                <td>Returns <code>{ ok: true, name: 'Kutumb API' }</code>. Used to check Render is awake. Not under <code>/api</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Auth · <code>/api/auth</code></h3>
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Who</th><th>JWT</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/auth/register</code></td>
+                <td class="who">Public</td>
+                <td>No</td>
+                <td>Creates a <b>resident</b> with hashed password and <code>status: pending</code>. No JWT. Duplicate email → 400.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/auth/login</code></td>
+                <td class="who">Public</td>
+                <td>No</td>
+                <td>Checks email + bcrypt password. Pending resident or inactive → 403. Success: JWT (id, role, 7 days) + user object without password.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/auth/forgot-password</code></td>
+                <td class="who">Public</td>
+                <td>No</td>
+                <td>If email exists, stores SHA-256 hash of a random token for 1 hour. Same message either way (does not leak emails). This demo does not send mail; JSON includes <code>resetLink</code> which Forgot.jsx shows on screen.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/auth/reset-password</code></td>
+                <td class="who">Public</td>
+                <td>No</td>
+                <td>Body: token + new password. Finds unexpired hashed token, bcrypt-hashes the new password, clears the reset fields.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Users · <code>/api/users</code></h3>
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Who</th><th>JWT</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/users/me</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Returns the current user (used on page refresh to restore the session).</td>
+              </tr>
+              <tr>
+                <td class="verb">PUT</td>
+                <td><code>/api/users/me</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Updates own profile: name, phone, photo, family, vehicles, pets, emergency contacts, residentType.</td>
+              </tr>
+              <tr>
+                <td class="verb">PUT</td>
+                <td><code>/api/users/me/password</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Checks current password with bcrypt, then saves a new hash.</td>
+              </tr>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/users</code></td>
+                <td class="who">Admin</td>
+                <td>Yes</td>
+                <td>Lists users. Query: <code>role</code>, <code>status</code>, <code>q</code> (name/email/flat search).</td>
+              </tr>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/users/staff</code></td>
+                <td class="who">Admin</td>
+                <td>Yes</td>
+                <td>Approved staff only — used when assigning a complaint.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/users</code></td>
+                <td class="who">Admin</td>
+                <td>Yes</td>
+                <td>Add member (staff/security/resident). Created as <code>approved</code> with hashed password.</td>
+              </tr>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/users/:id</code></td>
+                <td class="who">Admin, or that user</td>
+                <td>Yes</td>
+                <td>One user without password. Used on the approve-resident page.</td>
+              </tr>
+              <tr>
+                <td class="verb">PUT</td>
+                <td><code>/api/users/:id</code></td>
+                <td class="who">Admin</td>
+                <td>Yes</td>
+                <td>Approve / change status, block, flat, role, staffType. This is the Save / Approve resident call.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Complaints · <code>/api/complaints</code></h3>
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Who</th><th>JWT</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/complaints</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Resident: own slips. Staff: jobs for their trade. Admin: all. Optional <code>?status=</code>.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/complaints</code></td>
+                <td class="who">Resident, admin</td>
+                <td>Yes</td>
+                <td>Creates a complaint. Maps category → staffType and auto-assigns the first matching approved staff.</td>
+              </tr>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/complaints/:id</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>One complaint with raiser, assignee, comments.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/complaints/:id/assign</code></td>
+                <td class="who">Admin</td>
+                <td>Yes</td>
+                <td>Sets <code>assignedTo</code> and status <code>assigned</code>.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/complaints/:id/status</code></td>
+                <td class="who">Logged in (staff: own job)</td>
+                <td>Yes</td>
+                <td>Updates status (open → in-progress → resolved). Staff may attach <code>proofMedia</code>. Staff can claim an unassigned job in their trade.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/complaints/:id/comment</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Pushes a comment with the current user id.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/complaints/:id/escalate</code></td>
+                <td class="who">Resident, admin</td>
+                <td>Yes</td>
+                <td>Sets status <code>escalated</code> and priority <code>high</code>.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/complaints/:id/rate</code></td>
+                <td class="who">Resident (owner)</td>
+                <td>Yes</td>
+                <td>Stars + comment, only after status is <code>resolved</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Bills · <code>/api/bills</code></h3>
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Who</th><th>JWT</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/bills</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Resident: own bills. Others: all. Applies late fee on the way out (overdue + ₹100 on maintenance).</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/bills/generate</code></td>
+                <td class="who">Admin</td>
+                <td>Yes</td>
+                <td>Creates one bill per approved resident for a month/type (skips duplicates).</td>
+              </tr>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/bills/:id</code></td>
+                <td class="who">Logged in (resident: own)</td>
+                <td>Yes</td>
+                <td>One bill for the printable slip / receipt page.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/bills/:id/order</code></td>
+                <td class="who">Logged in (resident: own)</td>
+                <td>Yes</td>
+                <td>Starts pay. This demo has no payment-gateway keys, so it returns <code>{ demo: true, amount }</code>. The UI then calls verify.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/bills/:id/verify</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Marks the bill <code>paid</code> and sets <code>paidAt</code>. Demo verify sends no payment signature.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Bookings · <code>/api/bookings</code></h3>
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Who</th><th>JWT</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/bookings/facilities</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Clubhouse / facilities list for the calendar form.</td>
+              </tr>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/bookings</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Resident: own bookings. Admin: all. Optional <code>?date=</code> <code>?facility=</code>.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/bookings</code></td>
+                <td class="who">Resident, admin</td>
+                <td>Yes</td>
+                <td>Creates a booking. Rejects past dates and overlapping pending/approved slots. Admin bookings start <code>approved</code>; residents start <code>pending</code>.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/bookings/:id/status</code></td>
+                <td class="who">Owner or admin</td>
+                <td>Yes</td>
+                <td>Approve / reject (admin only) or cancel (owner or admin).</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Notices · <code>/api/notices</code></h3>
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Who</th><th>JWT</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/notices</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>All notices, pinned first, then newest.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/notices</code></td>
+                <td class="who">Admin</td>
+                <td>Yes</td>
+                <td>Creates a notice (title, body, type, pin, attachments).</td>
+              </tr>
+              <tr>
+                <td class="verb">PUT</td>
+                <td><code>/api/notices/:id</code></td>
+                <td class="who">Admin</td>
+                <td>Yes</td>
+                <td>Update / toggle pin.</td>
+              </tr>
+              <tr>
+                <td class="verb">DELETE</td>
+                <td><code>/api/notices/:id</code></td>
+                <td class="who">Admin</td>
+                <td>Yes</td>
+                <td>Removes the notice.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Visitors · <code>/api/visitors</code></h3>
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Who</th><th>JWT</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/visitors</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Resident: own guests. Others: all. Optional <code>?status=</code>.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/visitors</code></td>
+                <td class="who">Resident, admin</td>
+                <td>Yes</td>
+                <td>Pre-approves a guest. Generates a 6-digit <code>passCode</code>, status <code>pre-approved</code>.</td>
+              </tr>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/visitors/pass/:code</code></td>
+                <td class="who">Security, admin</td>
+                <td>Yes</td>
+                <td>Looks up a pass at the gate by the 6-digit code.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/visitors/:id/enter</code></td>
+                <td class="who">Security, admin</td>
+                <td>Yes</td>
+                <td>Status <code>entered</code>, stamps <code>entryAt</code>.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/visitors/:id/exit</code></td>
+                <td class="who">Security, admin</td>
+                <td>Yes</td>
+                <td>Status <code>exited</code>, stamps <code>exitAt</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Emergencies · <code>/api/emergencies</code></h3>
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Who</th><th>JWT</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/emergencies</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Resident: own SOS. Others: all. Optional <code>?status=</code>.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/emergencies</code></td>
+                <td class="who">Resident, admin, security</td>
+                <td>Yes</td>
+                <td>Creates SOS (type + message) with flat/block from the user. Status <code>active</code>.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/emergencies/:id/handle</code></td>
+                <td class="who">Admin, security, staff</td>
+                <td>Yes</td>
+                <td>Sets status <code>handled</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Dashboard &amp; upload</h3>
+          <table>
+            <thead>
+              <tr><th>Method</th><th>Path</th><th>Who</th><th>JWT</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="verb">GET</td>
+                <td><code>/api/dashboard</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Different JSON per role: admin courtyard counts, resident home counts, staff job counts, security expected + SOS.</td>
+              </tr>
+              <tr>
+                <td class="verb">POST</td>
+                <td><code>/api/upload</code></td>
+                <td class="who">Logged in</td>
+                <td>Yes</td>
+                <td>Multer, memory, max 12MB. This demo returns a base64 <code>data:</code> URL. Used for complaint photos, proof, and notice attachments.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>That is the full list: <b>44 routes</b> (1 health + 43 under <code>/api</code>).</p>
+        </article>
+
+        <article class="card">
+          <h2>Backend workflows (what the API actually does)</h2>
+          <h3>Register / login</h3>
+          <p>
+            Register always creates <code>role: resident</code>, <code>status: pending</code>. Login rejects pending
+            residents (403) and inactive accounts. Success: <code>jwt.sign({ id, role })</code>.
+          </p>
+          <h3>Auto-assign complaints</h3>
+          <p><code>utils/staffJobs.js</code> map:</p>
+          <p>
+            <span class="chip">plumbing → plumber</span>
+            <span class="chip">electrical → electrician</span>
+            <span class="chip">housekeeping → housekeeping</span>
+            <span class="chip">lift → lift</span>
+            <span class="chip">other/security → general</span>
+          </p>
+          <p>
+            On POST, find first approved staff with that <code>staffType</code>. If found, set
+            <code>assignedTo</code> and status <code>assigned</code>. Admin can POST <code>/assign</code> later.
+            Staff GET uses <code>staffJobFilter</code>: jobs assigned to me, or unassigned in my trade.
+          </p>
+          <figure>
+            <img class="wide" src="img/kutumb-complaint-flow.png" alt="Complaint assign flow" />
+            <figcaption>Auto-assign is a User.findOne, not a queue system.</figcaption>
+          </figure>
+          <h3>Bills</h3>
+          <p>
+            Generate loops approved residents, skips duplicates for same month/year/type/title.
+            <code>maybeLateFee</code> on GET: if past dueDate and not paid → overdue; maintenance gets lateFee 100.
+            Pay in this project: order returns <code>{ demo: true }</code>, then verify sets status
+            <code>paid</code> and <code>paidAt</code>. There is no live payment gateway on the hosted demo.
+          </p>
+          <h3>Bookings</h3>
+          <p>
+            Clash: same facility + date + overlapping start/end among pending/approved.
+            Times compared as strings <code>HH:mm</code>. Past dates rejected.
+          </p>
+          <h3>Visitors</h3>
+          <p>
+            Create: random 6-digit <code>passCode</code>, status pre-approved. Enter/exit stamp
+            <code>entryAt</code> / <code>exitAt</code>. Lookup: <code>GET /visitors/pass/:code</code>.
+          </p>
+          <figure>
+            <img class="wide" src="img/kutumb-gate-flow.png" alt="Gate API steps" />
+            <figcaption>Security role is required for enter/exit (and admin).</figcaption>
+          </figure>
+          <h3>Forgot password</h3>
+          <p>
+            Random token stored as SHA-256 hash + 1 hour expiry. This demo does not send email.
+            API returns <code>resetLink</code> (<code>CLIENT_URL/reset-password/&lt;token&gt;</code>). Forgot page prints that link.
+          </p>
+          <h3>Upload</h3>
+          <p>
+            Multer memory storage, 12MB. Buffer is turned into
+            <code>data:&lt;mime&gt;;base64,...</code> and that string is saved on the document (complaint media, proof, notice attachments).
+          </p>
+          <h3>Seed + demo staff</h3>
+          <p>
+            <code>npm run seed</code> wipes the eight collections and creates demo users, facilities, and sample rows.
+            On every API boot, <code>ensureDemoStaff()</code> adds housekeeping / lift / general staff if those emails are missing
+            (so auto-assign still works even if seed was not re-run).
+          </p>
+        </article>
+
+        <article class="card">
+          <h2>Env the interviewer may ask about</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Variable</th>
+                <th>Where</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>MONGO_URI</code></td><td>Render / local server</td><td>Atlas connection</td></tr>
+              <tr><td><code>JWT_SECRET</code></td><td>server</td><td>Sign and verify tokens</td></tr>
+              <tr><td><code>CLIENT_URL</code></td><td>server</td><td>CORS allow-list + reset-password links</td></tr>
+              <tr><td><code>PORT</code></td><td>server</td><td>Local default 5000. Render sets this.</td></tr>
+              <tr><td><code>VITE_API_URL</code></td><td>Vercel client</td><td>Where <code>fetch</code> goes (no <code>/api</code>, no trailing slash)</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card">
+          <h2>Likely interview questions (backend)</h2>
+          <div class="q">
+            <p><strong>Why MongoDB not MySQL?</strong> Nested family/vehicles on the user document, flexible complaint comments, faster to ship a college MERN project. Relations still exist via ObjectId + <code>populate</code>.</p>
+            <p><strong>What is Mongoose doing?</strong> Schemas, validation, and <code>populate</code>. Example: a bill stores <code>resident: ObjectId</code>; GET populates name, flat, phone so the receipt page does not need a second query from React.</p>
+            <p><strong>Why bcrypt, not plain text or SHA?</strong> Register/seed hash with <code>bcrypt.hash(password, 10)</code>. Login uses <code>bcrypt.compare</code>. Bcrypt is slow on purpose (salt + rounds) so a stolen DB is hard to brute-force. SHA is fast — that is a weakness for passwords.</p>
+            <p><strong>Walk through JWT on the API.</strong> Login succeeds → <code>jwt.sign({ id, role }, JWT_SECRET, { expiresIn: '7d' })</code>. Later <code>auth</code> middleware: Bearer header → <code>jwt.verify</code> → load User without password → <code>req.user</code>. Payload is not encrypted; the signature is the lock.</p>
+            <p><strong>Why load the user from Mongo after verify?</strong> Token only has id and role. We still need status, flat, staffType. If the account was deleted, verify would pass but <code>findById</code> fails → 401.</p>
+            <p><strong>401 vs 403?</strong> 401 = not logged in or bad/expired token. 403 = logged in but wrong role or pending resident. Login: pending → 403. Missing Bearer → 401.</p>
+            <p><strong>How do you stop a resident hitting admin APIs?</strong> JWT has role. <code>allowRoles('admin')</code> on generate bills, assign, pin notice, add member. UI hiding the menu is not enough. Also filter lists: resident GET bills/complaints/visitors is scoped to <code>req.user._id</code>.</p>
+            <p><strong>How is a plumber auto-assigned?</strong> <code>staffJobs.js</code> maps category → <code>staffType</code> (plumbing → plumber). On POST complaint, <code>User.findOne({ role: 'staff', status: 'approved', staffType })</code>. First match gets <code>assignedTo</code> and status <code>assigned</code>. Admin can POST <code>/assign</code> later. Staff GET uses <code>staffJobFilter</code>: my jobs, or unassigned in my trade.</p>
+            <p><strong>How are booking clashes stopped?</strong> Same facility + same date + status pending or approved. Times are <code>HH:mm</code> strings. Overlap if <code>aStart &lt; bEnd &amp;&amp; bStart &lt; aEnd</code>. Past dates rejected. Resident starts <code>pending</code>; admin starts <code>approved</code>.</p>
+            <p><strong>How do bills and late fees work?</strong> Admin generate: one bill per approved resident, skip duplicate month/year/type/title. On GET, <code>maybeLateFee</code>: unpaid and past dueDate → <code>overdue</code>; maintenance adds ₹100 <code>lateFee</code>. Pay: order returns <code>{ demo: true }</code>; verify sets <code>paid</code> + <code>paidAt</code>.</p>
+            <p><strong>How does the gate pass work on the API?</strong> POST visitor makes a random 6-digit <code>passCode</code>, status <code>pre-approved</code>. Security <code>GET /visitors/pass/:code</code>, then enter stamps <code>entryAt</code>, exit stamps <code>exitAt</code>. Still-inside guests stay <code>entered</code> until exit.</p>
+            <p><strong>Forgot password without email?</strong> Random token, store SHA-256 hash + 1 hour expiry (raw token is not in Mongo). Same success message whether the email exists (no leak). This demo returns <code>resetLink</code>. Reset finds unexpired hash, bcrypts the new password, clears reset fields.</p>
+            <p><strong>Where do photos live?</strong> Multer memory, 12MB. Buffer → <code>data:&lt;mime&gt;;base64,...</code> string on the document (complaint media, proof, notice attachments). JSON limit is 15mb in <code>index.js</code> so those strings fit.</p>
+            <p><strong>What is CORS?</strong> Browser blocks JS on vercel.app from calling onrender.com unless the API sends Access-Control-Allow-Origin matching <code>CLIENT_URL</code> (and localhost for dev).</p>
+            <p><strong>Which routes are public?</strong> Only health <code>GET /</code>, register, login, forgot-password, reset-password. Everything under the other <code>/api</code> routers needs JWT.</p>
+            <p><strong>Why seed locally for Render?</strong> Free Render has no Shell. Seed writes to the same Atlas DB the API uses. On every boot, <code>ensureDemoStaff()</code> adds extra trades if those emails are missing so auto-assign still works.</p>
+            <p><strong>Why does the first load take 50s?</strong> Free Render spins down. First request wakes the Node process.</p>
+            <p><strong>Do you blacklist JWTs on logout?</strong> No. Logout only deletes <code>kutumb_token</code> in the browser. Token stays valid until 7-day expiry. Honest: a stolen token works until then; industry often uses short access tokens + refresh, or httpOnly cookies.</p>
+            <p><strong>Indexes / uniqueness?</strong> User <code>email</code> is unique. Duplicate register → 400. Bills skip duplicates in generate by querying existing month/year/type. No extra compound indexes — fine for a college dataset, say that if they ask.</p>
+          </div>
+        </article>
+      </section>
+    </main>
+    <script>
+      const fe = document.getElementById('fe');
+      const be = document.getElementById('be');
+      const b1 = document.getElementById('btn-fe');
+      const b2 = document.getElementById('btn-be');
+      function show(which) {
+        const front = which === 'fe';
+        fe.classList.toggle('show', front);
+        be.classList.toggle('show', !front);
+        b1.className = front ? 'on-front' : 'off';
+        b2.className = front ? 'off' : 'on-back';
+      }
+      b1.onclick = () => show('fe');
+      b2.onclick = () => show('be');
+    </script>
+  </body>
+</html>
